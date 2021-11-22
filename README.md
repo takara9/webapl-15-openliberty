@@ -83,6 +83,17 @@ $ curl -s http://localhost:9080/rest/system/properties|jq
 
 ## Kubernetesデプロイ
 
+環境設定
+
+~~~
+kubectl create ns liberty9
+kubectl config set-context liberty9 --namespace=liberty9 --cluster=kubernetes --user=admin
+kubectl config use-context liberty9
+kubectl config get-contexts
+~~~
+
+
+
 コンテナレジストリに、コンテナイメージが登録されている状態で、以下を実行する。
 
 ~~~
