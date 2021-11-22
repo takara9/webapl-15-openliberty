@@ -74,7 +74,6 @@ pipeline {
       steps {
         script {
           sh 'kubectl cluster-info --kubeconfig $KUBECONFIG'
-	  sh 'kubectl apply -f configmap.yaml --kubeconfig $KUBECONFIG'
 	  sh 'sed s/__BUILDNUMBER__/$TAG/ k8s-yaml/deploy.yaml > $KUBEYAML'
           sh 'cat -n $KUBEYAML'
           sh 'kubectl apply -f $KUBEYAML --kubeconfig $KUBECONFIG'
