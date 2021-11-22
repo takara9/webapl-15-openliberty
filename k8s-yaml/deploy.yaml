@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: webjava
-        image: harbor.labo.local/tkr/webapl-9:__BUILDNUMBER__        
+        image: harbor.labo.local/tkr/web-apl-openliberty:__BUILDNUMBER__        
         #image: maho/webapl-9:0.2
         ports:
         - containerPort: 9080
