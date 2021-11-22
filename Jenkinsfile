@@ -1,27 +1,11 @@
-def get_tag() {
-  sh (
-     script: "curl -s http://ms-counter.ms-counter.k8s1.labo.local/get/openliberty9",
-     returnStdout: true
-  )
-} 
-
-def inc_tag() {
-  sh (
-     script: "curl -s http://ms-counter.ms-counter.k8s1.labo.local/inc/openliberty9",
-     returnStdout: true
-  )
-} 
-
-
 pipeline {
 
   environment {
     registry = "tkr/web-apl-openliberty"
     dockerImage  = ""
-    dockerImage2 = ""    
     KUBECONFIG = credentials('admin.kubeconfig-k8s1-liberty9')
     KUBEYAML = "deployment.yaml"
-    TAG =  inc_tag()
+    TAG = "0.$BUILD_ID"
     
   }
 
@@ -32,7 +16,6 @@ pipeline {
         echo 'Notify GitLab'
         updateGitlabCommitStatus name: 'build', state: 'pending'
         updateGitlabCommitStatus name: 'build', state: 'success'
-	echo "${TAG}"
       }
     }
 
@@ -77,7 +60,6 @@ pipeline {
 	  sh 'sed s/__BUILDNUMBER__/$TAG/ k8s-yaml/deploy.yaml > $KUBEYAML'
           sh 'cat -n $KUBEYAML'
           sh 'kubectl apply -f $KUBEYAML --kubeconfig $KUBECONFIG'
-	  sh 'echo TAG == $BUILD_ID'
         }
       }
     }
