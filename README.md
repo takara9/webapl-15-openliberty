@@ -1,5 +1,25 @@
 # OpenLiberty microprofile のサンプルプログラム
 
+OpenLibery の MicroProfile で作った REST-API の Javaプログラムを
+mavenでビルドとテスト、コンテナのビルド、Kubernetesへのデプロイ、
+
+
+## Eclipseのプロジェクトにインポート
+
+ターミナルから、ワークスペース用のディレクトリを作成して移動、git clone する。
+
+~~~
+mkdir workspace-liberty
+cd workspace-liberty
+ssh://git@gitlab.labo.local:2224/tkr/web-apl-openliberty.git
+cd web-apl-openliberty
+~~~
+
+Eclipseの起動時に、上記で作成した workspace-liberty を指定して起動する。
+
+
+
+
 
 ## Mavenを使った操作
 
@@ -29,7 +49,6 @@ mvn liberty:dev
 ~~~
 mvn liberty:devc
 ~~~
-
 
 
 
