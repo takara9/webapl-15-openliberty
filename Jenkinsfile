@@ -16,7 +16,7 @@ def inc_tag() {
 pipeline {
 
   environment {
-    registry = "gitlab.labo.local/tkr/web-apl-openliberty"
+    registry = "tkr/web-apl-openliberty"
     dockerImage  = ""
     dockerImage2 = ""    
     KUBECONFIG = credentials('admin.kubeconfig-k8s1-liberty9')
