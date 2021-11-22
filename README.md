@@ -1,7 +1,12 @@
 # OpenLiberty microprofile のサンプルプログラム
 
-OpenLibery の MicroProfile で作った REST-API の Javaプログラムを
-mavenでビルドとテスト、コンテナのビルド、Kubernetesへのデプロイ、
+OpenLibery の MicroProfile で作った REST-API の Javaプログラムについて
+以下を実行する。
+
+* Eclipseへのインポート
+* mavenでビルドとテスト、コンテナのビルド
+* Kubernetesへのデプロイ
+* JenkinsのCICDパイプラインの設定
 
 
 ## Eclipseのプロジェクトにインポート
@@ -11,17 +16,23 @@ mavenでビルドとテスト、コンテナのビルド、Kubernetesへのデ�
 ~~~
 mkdir workspace-liberty
 cd workspace-liberty
-ssh://git@gitlab.labo.local:2224/tkr/web-apl-openliberty.git
+git clone ssh://git@gitlab.labo.local:2224/tkr/web-apl-openliberty.git
 cd web-apl-openliberty
 ~~~
 
 Eclipseの起動時に、上記で作成した workspace-liberty を指定して起動する。
 
+Eclipse の表示画面から以下の操作により、Mavenbプロジェクトをインポートする。
+
+1. Package Explorer -> Import Project -> Maven -> Existing Maven Projects
+2. Next をクリック
+3. Root Directory に web-apl-openliberty を指定
+4. Finish をクリック
 
 
 
 
-## Mavenを使った操作
+## Mavenコマンドを使った操作
 
 Liberty microprofile を使ったJavaソースからのwarビルド
 
