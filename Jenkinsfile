@@ -77,7 +77,7 @@ pipeline {
 	  sh 'sed s/__BUILDNUMBER__/$TAG/ k8s-yaml/deploy.yaml > $KUBEYAML'
           sh 'cat -n $KUBEYAML'
           sh 'kubectl apply -f $KUBEYAML --kubeconfig $KUBECONFIG'
-	  sh 'echo ${env.BUILD_TAG}'
+	  sh 'env'
         }
       }
     }
