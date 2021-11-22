@@ -10,21 +10,21 @@ mvn package
 ~~~
 
 
-target以下を消去
+ビルドの生成物つまりtarget以下を消去する。
 
 ~~~
 mvn clean
 ~~~
 
 
-開発用サーバー(Liberty)でサーブレット起動
+ローカルでのテスト用に、開発用サーバー(Liberty)でサーブレット起動
 
 ~~~
 mvn liberty:dev
 ~~~
 
 
-コンテナ内でサーブレットを起動（開発モード）
+コンテナ内でJavaアプリを起動する。
 
 ~~~
 mvn liberty:devc
@@ -37,26 +37,28 @@ mvn liberty:devc
 ## Dockerコマンドを利用した操作 
 
 
-Dockerfileの存在するフォルダで以下を実行
+コンテナのビルドには、Dockerfileの存在するフォルダで以下を実行する。
 
 ~~~
-docker build -t maho/webapl-9:1.0 .
+docker build -t maho/webapl-9:0.2 .
 ~~~
 
-DockerHubへ登録
+DockerHubへ登録する。
 
 ~~~
-docker push maho/webapl-9:1.0 
+docker push maho/webapl-9:0.2 
 ~~~
 
 コンテナの単体テスト
 
 ~~~
-docker run -it --rm --name test -p 9080:9080 maho/webapl-9:1.0
+docker run -it --rm --name test -p 9080:9080 maho/webapl-9:0.2
 ~~~
 
 
-## アクセステスト
+## コンテナやmavenでのアクセステスト
+
+curlで以下のURLをアクセスする
 
 * http://localhost:9080/rest/system/properties/ Liberyのプロパティ
 * http://localhost:9080/rest/system/personList/ リストJSON
@@ -83,7 +85,7 @@ $ curl -s http://localhost:9080/rest/system/properties|jq
 
 ## Kubernetesデプロイ
 
-環境設定
+専用の名前空間を作成する設定
 
 ~~~
 kubectl create ns liberty9
@@ -92,6 +94,17 @@ kubectl config use-context liberty9
 kubectl config get-contexts
 ~~~
 
+YAMLファイルはJenkinsfile用に設定されているので、21行目をコメントにする。
+22行目のコメントマークを削除して有効化
+
+~~~
+    18	    spec:
+    19	      containers:
+    20	      - name: webjava
+    21	        image: harbor.labo.local/tkr/web-apl-openliberty:__BUILDNUMBER__        
+    22	        #image: maho/webapl-9:0.2
+    23	        ports:
+~~~
 
 
 コンテナレジストリに、コンテナイメージが登録されている状態で、以下を実行する。
@@ -101,6 +114,8 @@ kubectl apply -f k8s-yaml/deploy.yaml
 ~~~
 
 Readiness Probe が UPになるまで30秒かかるので、その後、アクセスできるようになる。
+
+
 
 
 
