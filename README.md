@@ -147,6 +147,96 @@ Readiness Probe が UPになるまで30秒かかるので、その後、アク�
 
 
 
+## Jenkinsの新規ジョブ作成
+
+Jenkinsのダッシュボード画面から、Gitクローン、ビルド、デプロイまでを自動化する。
+
+
+### Kubernetesクラスタの認証情報を登録
+
+Kuberneteへデプロイするために上記で設定したkubeconfigファイルをJenkinsに登録する。
+この設定は、以下のJenkinsfileで設定されている。
+
+~~~
+    KUBECONFIG = credentials('admin.kubeconfig-k8s1-liberty9')
+~~~
+
+登録方法は、
+ダッシュボード -> Jenkinsの管理 -> Manage Credentials -> Stores scoped to Jenkins -> Domains (global) -> 認証情報の追加
+
+* 種類: Secret file 
+* スコープ: グローバル
+* File: kubeconfigファイルを選択
+* ID: Jenkinsfileから指定するキーワードを指定する（上記参照）
+
+
+
+### ソースコードリポジトリ(GitLab)の認証情報登録
+
+ジョブの設定から参照する。
+
+ダッシュボード -> Jenkinsの管理 -> Manage Credentials -> Stores scoped to Jenkins -> Domains (global) -> 認証情報の追加
+
+* 種類: ユーザー名とパスワード
+* スコープ: グローバル
+* ユーザー名: GitLabのユーザーID
+* パスワード: 同パスワード
+* ID: 識別用の文字列
+* 説明: 後で解らなくならないように、記述しておく。
+
+
+
+### コンテナレジストリ(Harbor)の認証情報登録
+
+下記Jenkinsfile の中から参照する。49行目の"harbor"が認証情報を登録する。
+
+~~~
+    46	    stage('コンテナレジストリへプッシュ') {
+    47	      steps {
+    48	        script {
+    49	          docker.withRegistry("https://harbor.labo.local","harbor") {
+    50	            dockerImage.push()
+    51	          }
+    52	        }
+    53	      }
+    54	    }
+~~~
+
+
+ダッシュボード -> Jenkinsの管理 -> Manage Credentials -> Stores scoped to Jenkins -> Domains (global) -> 認証情報の追加
+
+* 種類: ユーザー名とパスワード
+* スコープ: グローバル
+* ユーザー名: HarborのユーザーID
+* パスワード: 同パスワード
+* ID: 識別用の文字列（上記49行目 "harbor"）
+* 説明: 後で解らなくならないように、記述しておく。
+
+
+
+
+### Jenkinsのジョブ登録
+
+
+設定手順は、
+ダッシュボード -> 新規ジョブ作成 ->  ジョブ名をインプット -> パイプライン -> OKクリック
+
+GitLab Connectionに GitLab-Localが設定されていることを確認
+もしなければ、プラグインを確認する。
+
+* パイプラインの定義を"Pipeline script from SCM"を設定
+* SCM に Git を選択
+* リポジトリURLに GitLabのアドレスを設定する。
+　　https://gitlab.labo.local/tkr/web-apl-openliberty
+* 認証情報に GitLab のユーザーIDとパスワードを設定
+* ビルドするブランチに "*/main" を設定
+* Script Path に Jenkinsfile を設定する。
+* 最後に保存をクリック
+
+上記の操作で、準備が出来たので、ダッシュボードから登録したジョブを指定して、
+ビルド実行をクリックする。
+
+
 
 
 
