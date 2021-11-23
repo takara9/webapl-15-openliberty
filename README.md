@@ -8,8 +8,10 @@ OpenLibery の MicroProfile で作った REST-API の Javaプログラムにつ�
 * Kubernetesへのデプロイ
 * JenkinsのCICDパイプラインの設定
 
+削除したい。
 テスト submodule でリンク
 git submodule add ssh://git@github.com/takara9/webapl-15-openliberty webapl-15-openliberty
+ここまで
 
 ## Eclipseのプロジェクトにインポート
 
